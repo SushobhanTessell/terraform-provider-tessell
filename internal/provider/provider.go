@@ -3,6 +3,13 @@ package provider
 import (
 	"context"
 
+	"terraform-provider-tessell/internal/client"
+	"terraform-provider-tessell/internal/resources/dap"
+	"terraform-provider-tessell/internal/resources/database"
+	"terraform-provider-tessell/internal/resources/database_backup"
+	"terraform-provider-tessell/internal/resources/vpc"
+	"terraform-provider-tessell/internal/resources/vpc_peering"
+
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 )
@@ -23,35 +30,66 @@ func init() {
 	// }
 }
 
-func New(version string) func() *schema.Provider {
+func New(terraformVersion string) func() *schema.Provider {
 	return func() *schema.Provider {
-		p := &schema.Provider{
+		provider := &schema.Provider{
+			Schema: map[string]*schema.Schema{
+				"api_address": {
+					Type:        schema.TypeString,
+					Required:    true,
+					DefaultFunc: schema.EnvDefaultFunc("TESSELL_API_ADDRESS", nil),
+				},
+				"email_id": {
+					Type:        schema.TypeString,
+					Required:    true,
+					DefaultFunc: schema.EnvDefaultFunc("TESSELL_EMAIL_ID", nil),
+				},
+				"password": {
+					Type:        schema.TypeString,
+					Required:    true,
+					Sensitive:   true,
+					DefaultFunc: schema.EnvDefaultFunc("TESSELL_PASSWORD", nil),
+				},
+			},
 			DataSourcesMap: map[string]*schema.Resource{
-				"scaffolding_data_source": dataSourceScaffolding(),
+				"tessell_dap":              dap.DataSourceDAP(),
+				"tessell_daps":             dap.DataSourceDAPs(),
+				"tessell_database":         database.DataSourceDatabase(),
+				"tessell_databases":        database.DataSourceDatabases(),
+				"tessell_database_backup":  database_backup.DataSourceDatabaseBackup(),
+				"tessell_database_backups": database_backup.DataSourceDatabaseBackups(),
+				"tessell_vpc":              vpc.DataSourceVPC(),
+				"tessell_vpcs":             vpc.DataSourceVPCs(),
+				"tessell_vpc_peering":      vpc_peering.DataSourceVPCPeering(),
+				"tessell_vpc_peerings":     vpc_peering.DataSourceVPCPeerings(),
 			},
 			ResourcesMap: map[string]*schema.Resource{
-				"scaffolding_resource": resourceScaffolding(),
+				"tessell_dap":             dap.ResourceDAP(),
+				"tessell_database":        database.ResourceDatabase(),
+				"tessell_database_backup": database_backup.ResourceDatabaseBackup(),
+				"tessell_vpc":             vpc.ResourceVPC(),
+				"tessell_vpc_peering":     vpc_peering.ResourceVPCPeering(),
 			},
 		}
 
-		p.ConfigureContextFunc = configure(version, p)
+		provider.ConfigureContextFunc = configure(terraformVersion, provider)
 
-		return p
+		return provider
 	}
 }
 
-type apiClient struct {
-	// Add whatever fields, client or connection info, etc. here
-	// you would need to setup to communicate with the upstream
-	// API.
-}
+func configure(terraformVersion string, provider *schema.Provider) func(context.Context, *schema.ResourceData) (interface{}, diag.Diagnostics) {
+	return func(ctx context.Context, d *schema.ResourceData) (interface{}, diag.Diagnostics) {
+		emailId := d.Get("email_id").(string)
+		password := d.Get("password").(string)
+		apiAddress := d.Get("api_address").(string)
 
-func configure(version string, p *schema.Provider) func(context.Context, *schema.ResourceData) (interface{}, diag.Diagnostics) {
-	return func(context.Context, *schema.ResourceData) (interface{}, diag.Diagnostics) {
-		// Setup a User-Agent for your API client (replace the provider name for yours):
-		// userAgent := p.UserAgent("terraform-provider-scaffolding", version)
-		// TODO: myClient.UserAgent = userAgent
+		var diags diag.Diagnostics
 
-		return &apiClient{}, nil
+		c, err := client.NewClient(&apiAddress, &emailId, &password)
+		if err != nil {
+			return nil, diag.FromErr(err)
+		}
+		return c, diags
 	}
 }
