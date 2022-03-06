@@ -1,26 +1,16 @@
-# This is a basic workflow to help you get started with Actions
+---
 name: Best Practices Check
-
-# Controls when the workflow will run
 on:
-  push:
   pull_request:
     branches:
       - 'main'
-      - 'rel-**'
+      - 'rel-*'
+      - 'TS-*'
 
-  # Allows you to run this workflow manually from the Actions tab
-  workflow_dispatch:
-# A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
-  # This workflow contains a single job called "build"
   dev-checks:
-    # The type of runner that the job will run on
     runs-on: ubuntu-latest
-
-    # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
-
       - name: Dump GitHub context
         env:
           GITHUB_CONTEXT: ${{ toJson(github) }}
@@ -37,21 +27,20 @@ jobs:
         shell: bash
         run: |
           echo "SOURCE_BRANCH=$(echo ${GITHUB_REF#refs/heads/} | tr / -)" >> $GITHUB_ENV
+
       - name: Get branch name (pull request)
         if: github.event_name == 'pull_request'
         shell: bash
         run: |
-          echo "SOURCE_BRANCH=$(echo ${GITHUB_HEAD_REF} | tr / -)" >> $GITHUB_ENV
+          echo "SOURCE_BRANCH=$(echo ${{ github.event.pull_request.head.ref }} | tr / -)" >> $GITHUB_ENV
           echo "TARGET_BRANCH=$(echo ${GITHUB_BASE_REF} | tr / -)" >> $GITHUB_ENV
         
-      # Check if branch name is according to the guidelines
       - name: Check branch name
         if: ${{ !startsWith(env.SOURCE_BRANCH,'TS-') }}
         run: |
           echo "::debug::Branch name must start with 'TS-' ${{ env.SOURCE_BRANCH }}"
           exit 1
 
-      # Check if there is a merge conflict in the PR
       - name: Check for merge conflict in PR
         run: |
           if [ $(git grep -rln '<<<<<<< HEAD' -- ':(exclude)*dev-checks.yml') ]; then echo "Please resolve the merge conflict"; exit 1; else exit 0; fi
@@ -63,6 +52,7 @@ jobs:
         with:
           github-token: ${{ secrets.PIPELINES_REPO_TOKEN  }}
           script: |
+            const path = require('path')
             head_commit = "${{ github.sha }}"
             base_commit = "${{ github.sha }}"
             if ( "${{ github.event.before }}" != '0000000000000000000000000000000000000000') { 
@@ -81,6 +71,11 @@ jobs:
                 base: base_commit
             });
             response.data.files.forEach(function(file_entry) {
+              if (file_entry.filename.endsWith(".sql") && file_entry.filename.includes("db/migration/")) {
+                core.setOutput('db_migration_dir', path.dirname(file_entry.filename))
+              }
+            });
+            response.data.files.forEach(function(file_entry) {
               if (file_entry.filename.endsWith(".sql") && file_entry.filename.includes("db/migration/") && 
                    (file_entry.status == 'modified' || file_entry.status == 'removed')) {
                 console.log(file_entry.filename);
@@ -88,4 +83,15 @@ jobs:
                 core.setFailed("Modifying or removing a flyway history file " + file_entry.filename);
               }
             });
-  
+
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        if: steps.check_db_migration.outputs.db_migration_dir
+        with:
+          python-version: 3.9
+
+      - name: Check Version sequence of DB Scripts
+        id: check_db_version_seq
+        if: steps.check_db_migration.outputs.db_migration_dir
+        run:
+          python3 .github/scripts/check_db_migration_version_sequence.py "${{ steps.check_db_migration.outputs.db_migration_dir }}"
