@@ -57,7 +57,7 @@ jobs:
 
       - name: Check DB Migration Scripts
         id: check_db_migration
-        uses: actions/github-script@v5
+        uses: actions/github-script@v6
         if: github.event_name == 'pull_request'
         with:
           github-token: ${{ secrets.PIPELINES_REPO_TOKEN  }}

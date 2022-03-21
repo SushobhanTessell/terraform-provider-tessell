@@ -32,7 +32,7 @@ jobs:
         id: latest_tag
 
       - name: Create tag and update ref
-        uses: actions/github-script@v4
+        uses: actions/github-script@v6
         with:
           github-token: ${{ secrets.PIPELINES_REPO_TOKEN  }}
           script: |
