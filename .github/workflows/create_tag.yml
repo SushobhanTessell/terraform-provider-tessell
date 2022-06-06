@@ -19,6 +19,8 @@ on:
 jobs:
   create-tag-on-merge:
     runs-on: self-hosted
+    env:
+       SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL  }}
     if: github.event_name == 'pull_request' && github.event.action == 'closed' && github.event.pull_request.merged == true
     steps:
       - uses: actions/checkout@v2
@@ -96,3 +98,14 @@ jobs:
 
             console.log('Ref updated.');
             core.setOutput('tag_ref', fullTagName)
+
+
+
+      - name: Slack Notification
+        uses: act10ns/slack@v1.5.0
+        with:
+           status: ${{ job.status }}
+           steps: ${{ toJson(steps) }}
+           channel: ${{ secrets.SLACK_DEVOPS_CHANNEL  }}
+        if: failure()
+

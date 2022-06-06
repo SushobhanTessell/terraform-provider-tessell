@@ -10,6 +10,8 @@ on:
 jobs:
   auto-merge:
     runs-on: self-hosted
+    env:
+       SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL  }}
     if: contains(github.event.pull_request.head.ref, 'double_commit')
     steps:
       - name: Checkout
@@ -35,3 +37,13 @@ jobs:
           token: ${{ secrets.PIPELINES_REPO_TOKEN  }}
           pull-request-number: "${{ github.event.number }}"
           merge-method: squash
+
+     
+      - name: Slack Notification
+        uses: act10ns/slack@v1.5.0
+        with:
+           status: ${{ job.status }}
+           steps: ${{ toJson(steps) }}
+           channel: ${{ secrets.SLACK_DEVOPS_CHANNEL  }}
+        if: failure()
+
