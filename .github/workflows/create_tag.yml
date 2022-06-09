@@ -40,23 +40,44 @@ jobs:
           github-token: ${{ secrets.PIPELINES_REPO_TOKEN  }}
           script: |
             latest_tag = '0.0.0'
-
             // process multiple tags if any
             tags = "${{ env.TAGS }}".split(' ')
             if (tags.length == 1) {
               latest_tag = tags[0]
             } else {
-              tag0 = tags[0].split('.')
-              tag1 = tags[1].split('.')
-
-              // only if multiple tag is present in 'main' branch, then we want to take the tag with greater major version
-              if ((parseInt(tag0[1]) > parseInt(tag1[1])) && ("${{ github.event.pull_request.base.ref }}" == 'main')) {
-                latest_tag = tags[0]
+              if ("${{ github.event.pull_request.base.ref }}" == "main") {
+                for (i in tags) {
+                  tag = tags[i]
+                  console.log("Checking tag " + tag)
+                  if (latest_tag == null) {
+                    latest_tag = tag
+                    continue
+                  }
+                  latest_parts = latest_tag.split(".")
+                  tag_parts = tag.split(".")
+                  for (i = 0; i < tag_parts.length; i++) {
+                    if (parseInt(tag_parts[i]) > parseInt(latest_parts[i])) {
+                      latest_tag = tag
+                      break
+                    }
+                  }
+                }
               } else {
-                latest_tag = tags[1]
+                tag_base = "${{ github.event.pull_request.base.ref }}".substring(4).split(".").slice(0,2)
+                latest_tag = tag_base.join(".") + ".0"
+                for (i in tags) {
+                  tag = tags[i]
+                  console.log("branch - Checking tag " + tag)
+                  tag_parts = tag.split(".")
+                  if (tag_base[0] == tag_parts[0] && tag_base[1] == tag_parts[1]) {
+                    latest_parts = latest_tag.split(".")
+                    if (parseInt(latest_parts[2]) < parseInt(tag_parts[2])) {
+                      latest_tag = tag
+                    }
+                  }
+                }
               }
             }
-
             console.log("Latest tag: " + latest_tag)
 
             // check if we have
@@ -99,8 +120,6 @@ jobs:
             console.log('Ref updated.');
             core.setOutput('tag_ref', fullTagName)
 
-
-
       - name: Slack Notification
         uses: act10ns/slack@v1.5.0
         with:
@@ -108,4 +127,3 @@ jobs:
            steps: ${{ toJson(steps) }}
            channel: ${{ secrets.SLACK_DEVOPS_CHANNEL  }}
         if: failure()
-
