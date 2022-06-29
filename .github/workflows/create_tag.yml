@@ -56,8 +56,13 @@ jobs:
                   latest_parts = latest_tag.split(".")
                   tag_parts = tag.split(".")
                   for (i = 0; i < tag_parts.length; i++) {
+                    if (parseInt(tag_parts[i]) < parseInt(latest_parts[i])) {
+                      console.log("Skipping " + tag)
+                      break
+                    }
                     if (parseInt(tag_parts[i]) > parseInt(latest_parts[i])) {
                       latest_tag = tag
+                      console.log("Setting " + latest_tag)
                       break
                     }
                   }
