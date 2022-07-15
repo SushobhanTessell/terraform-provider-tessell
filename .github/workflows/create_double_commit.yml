@@ -87,7 +87,7 @@ jobs:
                 dstBranchMinVer = dstBranch.split('.')[1]
                 // if minor version is more than the current branch, its a latest release and
                 // we need to create DC
-                if (dstBranchMinVer <= prBaseBranchMinVer) {
+                if (parseInt(dstBranchMinVer) <= parseInt(prBaseBranchMinVer)) {
                   continue
                 }
               }
