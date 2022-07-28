@@ -10,6 +10,7 @@ builds:
     # usage by users in CI/CD systems like Terraform Cloud where
     # they are unable to install libraries.
     - CGO_ENABLED=0
+    - GPG_FINGERPRINT=5297 2DAC C3C7 8D48 AAF9  C6A8 D121 6F00 180F 7627
   mod_timestamp: '{{ .CommitTimestamp }}'
   flags:
     - -trimpath
@@ -28,6 +29,8 @@ builds:
   ignore:
     - goos: darwin
       goarch: '386'
+    - goos: windows
+      goarch: arm64
   binary: '{{ .ProjectName }}_v{{ .Version }}'
 archives:
 - format: zip
