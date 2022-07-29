@@ -3,6 +3,13 @@ package provider
 import (
 	"context"
 
+	"terraform-provider-tessell/internal/client"
+	"terraform-provider-tessell/internal/resource/availability_machine"
+	"terraform-provider-tessell/internal/resource/dataflix"
+	"terraform-provider-tessell/internal/resource/dataflix_catalog"
+	"terraform-provider-tessell/internal/resource/db_service"
+	"terraform-provider-tessell/internal/resource/db_snapshot"
+
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 )
@@ -23,35 +30,61 @@ func init() {
 	// }
 }
 
-func New(version string) func() *schema.Provider {
+func New(terraformVersion string) func() *schema.Provider {
 	return func() *schema.Provider {
-		p := &schema.Provider{
+		provider := &schema.Provider{
+			Schema: map[string]*schema.Schema{
+				"api_address": {
+					Type:        schema.TypeString,
+					Required:    true,
+					DefaultFunc: schema.EnvDefaultFunc("TESSELL_API_ADDRESS", nil),
+				},
+				"email_id": {
+					Type:        schema.TypeString,
+					Required:    true,
+					DefaultFunc: schema.EnvDefaultFunc("TESSELL_EMAIL_ID", nil),
+				},
+				"password": {
+					Type:        schema.TypeString,
+					Required:    true,
+					Sensitive:   true,
+					DefaultFunc: schema.EnvDefaultFunc("TESSELL_PASSWORD", nil),
+				},
+			},
 			DataSourcesMap: map[string]*schema.Resource{
-				"scaffolding_data_source": dataSourceScaffolding(),
+				"tessell_db_service":            db_service.DataSourceDBService(),
+				"tessell_db_services":           db_service.DataSourceDBServices(),
+				"tessell_db_snapshot":           db_snapshot.DataSourceDBSnapshot(),
+				"tessell_dataflix":              dataflix.DataSourceDataflix(),
+				"tessell_dataflixs":             dataflix.DataSourceDataflixs(),
+				"tessell_availability_machine":  availability_machine.DataSourceAvailabilityMachine(),
+				"tessell_availability_machines": availability_machine.DataSourceAvailabilityMachines(),
+				"tessell_dataflix_catalog":      dataflix_catalog.DataSourceDataflixCatalog(),
 			},
 			ResourcesMap: map[string]*schema.Resource{
-				"scaffolding_resource": resourceScaffolding(),
+				"tessell_db_service":  db_service.ResourceDBService(),
+				"tessell_db_snapshot": db_snapshot.ResourceDBSnapshot(),
 			},
 		}
 
-		p.ConfigureContextFunc = configure(version, p)
+		provider.ConfigureContextFunc = configure(terraformVersion, provider)
 
-		return p
+		return provider
 	}
 }
 
-type apiClient struct {
-	// Add whatever fields, client or connection info, etc. here
-	// you would need to setup to communicate with the upstream
-	// API.
-}
+func configure(terraformVersion string, provider *schema.Provider) func(context.Context, *schema.ResourceData) (interface{}, diag.Diagnostics) {
+	return func(_ context.Context, d *schema.ResourceData) (interface{}, diag.Diagnostics) {
+		emailId := d.Get("email_id").(string)
+		password := d.Get("password").(string)
+		apiAddress := d.Get("api_address").(string)
 
-func configure(version string, p *schema.Provider) func(context.Context, *schema.ResourceData) (interface{}, diag.Diagnostics) {
-	return func(context.Context, *schema.ResourceData) (interface{}, diag.Diagnostics) {
-		// Setup a User-Agent for your API client (replace the provider name for yours):
-		// userAgent := p.UserAgent("terraform-provider-scaffolding", version)
-		// TODO: myClient.UserAgent = userAgent
+		var diags diag.Diagnostics
 
-		return &apiClient{}, nil
+		c, err := client.NewClient(&apiAddress, &emailId, &password)
+		if err != nil {
+			return nil, diag.FromErr(err)
+		}
+		return c, diags
 	}
 }
