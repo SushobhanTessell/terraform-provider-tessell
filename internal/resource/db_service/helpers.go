@@ -964,18 +964,18 @@ func parseEntityUserAclSharingInfo(entityUserAclSharingInfo *model.EntityUserAcl
 
 func formPayloadForCloneTessellService(d *schema.ResourceData) model.CloneTessellServicePayload {
 	cloneTessellServicePayloadFormed := model.CloneTessellServicePayload{
-		SnapshotId:               helper.GetStringPointer(d.Get("snapshot_id").(string)),
-		Pitr:                     helper.GetStringPointer(d.Get("pitr").(string)),
-		Name:                     helper.GetStringPointer(d.Get("name").(string)),
-		Description:              helper.GetStringPointer(d.Get("description").(string)),
-		Subscription:             helper.GetStringPointer(d.Get("subscription").(string)),
-		EngineType:               helper.GetStringPointer(d.Get("engine_type").(string)),
-		Topology:                 helper.GetStringPointer(d.Get("topology").(string)),
-		NumOfInstances:           helper.GetIntPointer(d.Get("num_of_instances").(int)),
-		SoftwareImage:            helper.GetStringPointer(d.Get("software_image").(string)),
-		SoftwareImageVersion:     helper.GetStringPointer(d.Get("software_image_version").(string)),
-		AutoMinorVersionUpdate:   helper.GetBoolPointer(d.Get("auto_minor_version_update").(bool)),
-		EnableDeletionProtection: helper.GetBoolPointer(d.Get("enable_deletion_protection").(bool)),
+		SnapshotId:               helper.GetStringPointer(d.Get("snapshot_id")),
+		Pitr:                     helper.GetStringPointer(d.Get("pitr")),
+		Name:                     helper.GetStringPointer(d.Get("name")),
+		Description:              helper.GetStringPointer(d.Get("description")),
+		Subscription:             helper.GetStringPointer(d.Get("subscription")),
+		EngineType:               helper.GetStringPointer(d.Get("engine_type")),
+		Topology:                 helper.GetStringPointer(d.Get("topology")),
+		NumOfInstances:           helper.GetIntPointer(d.Get("num_of_instances")),
+		SoftwareImage:            helper.GetStringPointer(d.Get("software_image")),
+		SoftwareImageVersion:     helper.GetStringPointer(d.Get("software_image_version")),
+		AutoMinorVersionUpdate:   helper.GetBoolPointer(d.Get("auto_minor_version_update")),
+		EnableDeletionProtection: helper.GetBoolPointer(d.Get("enable_deletion_protection")),
 		Infrastructure:           formTessellServiceInfrastructurePayload(d.Get("infrastructure")),
 		ServiceConnectivity:      formTessellServiceConnectivityInfoPayload(d.Get("service_connectivity")),
 		Creds:                    formTessellServiceCredsPayload(d.Get("creds")),
@@ -1000,16 +1000,16 @@ func formPayloadForDeleteTessellService(d *schema.ResourceData) model.DeleteTess
 
 func formPayloadForProvisionTessellService(d *schema.ResourceData) model.ProvisionTessellServicePayload {
 	provisionTessellServicePayloadFormed := model.ProvisionTessellServicePayload{
-		Name:                     helper.GetStringPointer(d.Get("name").(string)),
-		Description:              helper.GetStringPointer(d.Get("description").(string)),
-		Subscription:             helper.GetStringPointer(d.Get("subscription").(string)),
-		EngineType:               helper.GetStringPointer(d.Get("engine_type").(string)),
-		Topology:                 helper.GetStringPointer(d.Get("topology").(string)),
-		NumOfInstances:           helper.GetIntPointer(d.Get("num_of_instances").(int)),
-		SoftwareImage:            helper.GetStringPointer(d.Get("software_image").(string)),
-		SoftwareImageVersion:     helper.GetStringPointer(d.Get("software_image_version").(string)),
-		AutoMinorVersionUpdate:   helper.GetBoolPointer(d.Get("auto_minor_version_update").(bool)),
-		EnableDeletionProtection: helper.GetBoolPointer(d.Get("enable_deletion_protection").(bool)),
+		Name:                     helper.GetStringPointer(d.Get("name")),
+		Description:              helper.GetStringPointer(d.Get("description")),
+		Subscription:             helper.GetStringPointer(d.Get("subscription")),
+		EngineType:               helper.GetStringPointer(d.Get("engine_type")),
+		Topology:                 helper.GetStringPointer(d.Get("topology")),
+		NumOfInstances:           helper.GetIntPointer(d.Get("num_of_instances")),
+		SoftwareImage:            helper.GetStringPointer(d.Get("software_image")),
+		SoftwareImageVersion:     helper.GetStringPointer(d.Get("software_image_version")),
+		AutoMinorVersionUpdate:   helper.GetBoolPointer(d.Get("auto_minor_version_update")),
+		EnableDeletionProtection: helper.GetBoolPointer(d.Get("enable_deletion_protection")),
 		Infrastructure:           formTessellServiceInfrastructurePayload(d.Get("infrastructure")),
 		ServiceConnectivity:      formTessellServiceConnectivityInfoPayload(d.Get("service_connectivity")),
 		Creds:                    formTessellServiceCredsPayload(d.Get("creds")),
@@ -1032,12 +1032,12 @@ func formTessellServiceInfrastructurePayload(tessellServiceInfrastructurePayload
 	tessellServiceInfrastructurePayloadData := tessellServiceInfrastructurePayloadRaw.([]interface{})[0].(map[string]interface{})
 
 	tessellServiceInfrastructurePayloadFormed := model.TessellServiceInfrastructurePayload{
-		Cloud:             helper.GetStringPointer(tessellServiceInfrastructurePayloadData["cloud"].(string)),
-		Region:            helper.GetStringPointer(tessellServiceInfrastructurePayloadData["region"].(string)),
-		AvailabilityZone:  helper.GetStringPointer(tessellServiceInfrastructurePayloadData["availability_zone"].(string)),
-		Vpc:               helper.GetStringPointer(tessellServiceInfrastructurePayloadData["vpc"].(string)),
-		ComputeType:       helper.GetStringPointer(tessellServiceInfrastructurePayloadData["compute_type"].(string)),
-		AdditionalStorage: helper.GetIntPointer(tessellServiceInfrastructurePayloadData["additional_storage"].(int)),
+		Cloud:             helper.GetStringPointer(tessellServiceInfrastructurePayloadData["cloud"]),
+		Region:            helper.GetStringPointer(tessellServiceInfrastructurePayloadData["region"]),
+		AvailabilityZone:  helper.GetStringPointer(tessellServiceInfrastructurePayloadData["availability_zone"]),
+		Vpc:               helper.GetStringPointer(tessellServiceInfrastructurePayloadData["vpc"]),
+		ComputeType:       helper.GetStringPointer(tessellServiceInfrastructurePayloadData["compute_type"]),
+		AdditionalStorage: helper.GetIntPointer(tessellServiceInfrastructurePayloadData["additional_storage"]),
 	}
 
 	return &tessellServiceInfrastructurePayloadFormed
@@ -1051,9 +1051,9 @@ func formTessellServiceConnectivityInfoPayload(tessellServiceConnectivityInfoPay
 	tessellServiceConnectivityInfoPayloadData := tessellServiceConnectivityInfoPayloadRaw.([]interface{})[0].(map[string]interface{})
 
 	tessellServiceConnectivityInfoPayloadFormed := model.TessellServiceConnectivityInfoPayload{
-		DnsPrefix:          helper.GetStringPointer(tessellServiceConnectivityInfoPayloadData["dns_prefix"].(string)),
-		ServicePort:        helper.GetIntPointer(tessellServiceConnectivityInfoPayloadData["service_port"].(int)),
-		EnablePublicAccess: helper.GetBoolPointer(tessellServiceConnectivityInfoPayloadData["enable_public_access"].(bool)),
+		DnsPrefix:          helper.GetStringPointer(tessellServiceConnectivityInfoPayloadData["dns_prefix"]),
+		ServicePort:        helper.GetIntPointer(tessellServiceConnectivityInfoPayloadData["service_port"]),
+		EnablePublicAccess: helper.GetBoolPointer(tessellServiceConnectivityInfoPayloadData["enable_public_access"]),
 		AllowedIpAddresses: helper.InterfaceToStringSlice(tessellServiceConnectivityInfoPayloadData["allowed_ip_addresses"]),
 	}
 
@@ -1068,8 +1068,8 @@ func formTessellServiceCredsPayload(tessellServiceCredsPayloadRaw interface{}) *
 	tessellServiceCredsPayloadData := tessellServiceCredsPayloadRaw.([]interface{})[0].(map[string]interface{})
 
 	tessellServiceCredsPayloadFormed := model.TessellServiceCredsPayload{
-		MasterUser:     helper.GetStringPointer(tessellServiceCredsPayloadData["master_user"].(string)),
-		MasterPassword: helper.GetStringPointer(tessellServiceCredsPayloadData["master_password"].(string)),
+		MasterUser:     helper.GetStringPointer(tessellServiceCredsPayloadData["master_user"]),
+		MasterPassword: helper.GetStringPointer(tessellServiceCredsPayloadData["master_password"]),
 	}
 
 	return &tessellServiceCredsPayloadFormed
@@ -1083,9 +1083,9 @@ func formTessellServiceMaintenanceWindow(tessellServiceMaintenanceWindowRaw inte
 	tessellServiceMaintenanceWindowData := tessellServiceMaintenanceWindowRaw.([]interface{})[0].(map[string]interface{})
 
 	tessellServiceMaintenanceWindowFormed := model.TessellServiceMaintenanceWindow{
-		Day:      helper.GetStringPointer(tessellServiceMaintenanceWindowData["day"].(string)),
-		Time:     helper.GetStringPointer(tessellServiceMaintenanceWindowData["time"].(string)),
-		Duration: helper.GetIntPointer(tessellServiceMaintenanceWindowData["duration"].(int)),
+		Day:      helper.GetStringPointer(tessellServiceMaintenanceWindowData["day"]),
+		Time:     helper.GetStringPointer(tessellServiceMaintenanceWindowData["time"]),
+		Duration: helper.GetIntPointer(tessellServiceMaintenanceWindowData["duration"]),
 	}
 
 	return &tessellServiceMaintenanceWindowFormed
@@ -1099,8 +1099,8 @@ func formTessellServiceBackupConfigurationPayload(tessellServiceBackupConfigurat
 	tessellServiceBackupConfigurationPayloadData := tessellServiceBackupConfigurationPayloadRaw.([]interface{})[0].(map[string]interface{})
 
 	tessellServiceBackupConfigurationPayloadFormed := model.TessellServiceBackupConfigurationPayload{
-		AutoSnapshot:   helper.GetBoolPointer(tessellServiceBackupConfigurationPayloadData["auto_snapshot"].(bool)),
-		Sla:            helper.GetStringPointer(tessellServiceBackupConfigurationPayloadData["sla"].(string)),
+		AutoSnapshot:   helper.GetBoolPointer(tessellServiceBackupConfigurationPayloadData["auto_snapshot"]),
+		Sla:            helper.GetStringPointer(tessellServiceBackupConfigurationPayloadData["sla"]),
 		SnapshotWindow: formTessellServiceBackupConfigurationPayloadSnapshotWindow(tessellServiceBackupConfigurationPayloadData["snapshot_window"]),
 	}
 
@@ -1115,8 +1115,8 @@ func formTessellServiceBackupConfigurationPayloadSnapshotWindow(tessellServiceBa
 	tessellServiceBackupConfigurationPayloadSnapshotWindowData := tessellServiceBackupConfigurationPayloadSnapshotWindowRaw.([]interface{})[0].(map[string]interface{})
 
 	tessellServiceBackupConfigurationPayloadSnapshotWindowFormed := model.TessellServiceBackupConfigurationPayloadSnapshotWindow{
-		Time:     helper.GetStringPointer(tessellServiceBackupConfigurationPayloadSnapshotWindowData["time"].(string)),
-		Duration: helper.GetIntPointer(tessellServiceBackupConfigurationPayloadSnapshotWindowData["duration"].(int)),
+		Time:     helper.GetStringPointer(tessellServiceBackupConfigurationPayloadSnapshotWindowData["time"]),
+		Duration: helper.GetIntPointer(tessellServiceBackupConfigurationPayloadSnapshotWindowData["duration"]),
 	}
 
 	return &tessellServiceBackupConfigurationPayloadSnapshotWindowFormed
@@ -1150,8 +1150,8 @@ func formScriptInfo(scriptInfoRaw interface{}) *model.ScriptInfo {
 	scriptInfoData := scriptInfoRaw.([]interface{})[0].(map[string]interface{})
 
 	scriptInfoFormed := model.ScriptInfo{
-		ScriptId:      helper.GetStringPointer(scriptInfoData["script_id"].(string)),
-		ScriptVersion: helper.GetStringPointer(scriptInfoData["script_version"].(string)),
+		ScriptId:      helper.GetStringPointer(scriptInfoData["script_id"]),
+		ScriptVersion: helper.GetStringPointer(scriptInfoData["script_version"]),
 	}
 
 	return &scriptInfoFormed
@@ -1165,11 +1165,11 @@ func formOracleEngineConfigPayload(oracleEngineConfigPayloadRaw interface{}) *mo
 	oracleEngineConfigPayloadData := oracleEngineConfigPayloadRaw.([]interface{})[0].(map[string]interface{})
 
 	oracleEngineConfigPayloadFormed := model.OracleEngineConfigPayload{
-		MultiTenant:          helper.GetBoolPointer(oracleEngineConfigPayloadData["multi_tenant"].(bool)),
-		ParameterProfile:     helper.GetStringPointer(oracleEngineConfigPayloadData["parameter_profile"].(string)),
-		OptionsProfile:       helper.GetStringPointer(oracleEngineConfigPayloadData["options_profile"].(string)),
-		CharacterSet:         helper.GetStringPointer(oracleEngineConfigPayloadData["character_set"].(string)),
-		NationalCharacterSet: helper.GetStringPointer(oracleEngineConfigPayloadData["national_character_set"].(string)),
+		MultiTenant:          helper.GetBoolPointer(oracleEngineConfigPayloadData["multi_tenant"]),
+		ParameterProfile:     helper.GetStringPointer(oracleEngineConfigPayloadData["parameter_profile"]),
+		OptionsProfile:       helper.GetStringPointer(oracleEngineConfigPayloadData["options_profile"]),
+		CharacterSet:         helper.GetStringPointer(oracleEngineConfigPayloadData["character_set"]),
+		NationalCharacterSet: helper.GetStringPointer(oracleEngineConfigPayloadData["national_character_set"]),
 	}
 
 	return &oracleEngineConfigPayloadFormed
@@ -1183,7 +1183,7 @@ func formPostgresqlEngineConfigPayload(postgresqlEngineConfigPayloadRaw interfac
 	postgresqlEngineConfigPayloadData := postgresqlEngineConfigPayloadRaw.([]interface{})[0].(map[string]interface{})
 
 	postgresqlEngineConfigPayloadFormed := model.PostgresqlEngineConfigPayload{
-		ParameterProfile: helper.GetStringPointer(postgresqlEngineConfigPayloadData["parameter_profile"].(string)),
+		ParameterProfile: helper.GetStringPointer(postgresqlEngineConfigPayloadData["parameter_profile"]),
 	}
 
 	return &postgresqlEngineConfigPayloadFormed
@@ -1197,7 +1197,7 @@ func formMySqlEngineConfigPayload(mySqlEngineConfigPayloadRaw interface{}) *mode
 	mySqlEngineConfigPayloadData := mySqlEngineConfigPayloadRaw.([]interface{})[0].(map[string]interface{})
 
 	mySqlEngineConfigPayloadFormed := model.MySqlEngineConfigPayload{
-		ParameterProfile: helper.GetStringPointer(mySqlEngineConfigPayloadData["parameter_profile"].(string)),
+		ParameterProfile: helper.GetStringPointer(mySqlEngineConfigPayloadData["parameter_profile"]),
 	}
 
 	return &mySqlEngineConfigPayloadFormed
@@ -1211,7 +1211,7 @@ func formSqlServerEngineConfigPayload(sqlServerEngineConfigPayloadRaw interface{
 	sqlServerEngineConfigPayloadData := sqlServerEngineConfigPayloadRaw.([]interface{})[0].(map[string]interface{})
 
 	sqlServerEngineConfigPayloadFormed := model.SqlServerEngineConfigPayload{
-		ParameterProfile: helper.GetStringPointer(sqlServerEngineConfigPayloadData["parameter_profile"].(string)),
+		ParameterProfile: helper.GetStringPointer(sqlServerEngineConfigPayloadData["parameter_profile"]),
 	}
 
 	return &sqlServerEngineConfigPayloadFormed
@@ -1225,7 +1225,7 @@ func formApacheKafkaEngineConfigPayload(apacheKafkaEngineConfigPayloadRaw interf
 	apacheKafkaEngineConfigPayloadData := apacheKafkaEngineConfigPayloadRaw.([]interface{})[0].(map[string]interface{})
 
 	apacheKafkaEngineConfigPayloadFormed := model.ApacheKafkaEngineConfigPayload{
-		ParameterProfile: helper.GetStringPointer(apacheKafkaEngineConfigPayloadData["parameter_profile"].(string)),
+		ParameterProfile: helper.GetStringPointer(apacheKafkaEngineConfigPayloadData["parameter_profile"]),
 	}
 
 	return &apacheKafkaEngineConfigPayloadFormed
@@ -1239,8 +1239,8 @@ func formCreateDatabasePayload1(databasesRaw interface{}) *model.CreateDatabaseP
 	databasesData := databasesRaw.(map[string]interface{})
 
 	createDatabasePayload1Formed := model.CreateDatabasePayload1{
-		DatabaseName:          helper.GetStringPointer(databasesData["database_name"].(string)),
-		SourceDatabaseId:      helper.GetStringPointer(databasesData["source_database_id"].(string)),
+		DatabaseName:          helper.GetStringPointer(databasesData["database_name"]),
+		SourceDatabaseId:      helper.GetStringPointer(databasesData["source_database_id"]),
 		DatabaseConfiguration: formCreateDatabasePayloadDatabaseConfiguration(databasesData["database_configuration"]),
 	}
 
@@ -1284,8 +1284,8 @@ func formOracleDatabaseConfig(oracleDatabaseConfigRaw interface{}) *model.Oracle
 	oracleDatabaseConfigData := oracleDatabaseConfigRaw.([]interface{})[0].(map[string]interface{})
 
 	oracleDatabaseConfigFormed := model.OracleDatabaseConfig{
-		ParameterProfile: helper.GetStringPointer(oracleDatabaseConfigData["parameter_profile"].(string)),
-		OptionsProfile:   helper.GetStringPointer(oracleDatabaseConfigData["options_profile"].(string)),
+		ParameterProfile: helper.GetStringPointer(oracleDatabaseConfigData["parameter_profile"]),
+		OptionsProfile:   helper.GetStringPointer(oracleDatabaseConfigData["options_profile"]),
 	}
 
 	return &oracleDatabaseConfigFormed
@@ -1299,7 +1299,7 @@ func formPostgresqlDatabaseConfig(postgresqlDatabaseConfigRaw interface{}) *mode
 	postgresqlDatabaseConfigData := postgresqlDatabaseConfigRaw.([]interface{})[0].(map[string]interface{})
 
 	postgresqlDatabaseConfigFormed := model.PostgresqlDatabaseConfig{
-		ParameterProfile: helper.GetStringPointer(postgresqlDatabaseConfigData["parameter_profile"].(string)),
+		ParameterProfile: helper.GetStringPointer(postgresqlDatabaseConfigData["parameter_profile"]),
 	}
 
 	return &postgresqlDatabaseConfigFormed
@@ -1313,7 +1313,7 @@ func formMySqlDatabaseConfig(mySqlDatabaseConfigRaw interface{}) *model.MySqlDat
 	mySqlDatabaseConfigData := mySqlDatabaseConfigRaw.([]interface{})[0].(map[string]interface{})
 
 	mySqlDatabaseConfigFormed := model.MySqlDatabaseConfig{
-		ParameterProfile: helper.GetStringPointer(mySqlDatabaseConfigData["parameter_profile"].(string)),
+		ParameterProfile: helper.GetStringPointer(mySqlDatabaseConfigData["parameter_profile"]),
 	}
 
 	return &mySqlDatabaseConfigFormed
@@ -1327,7 +1327,7 @@ func formSqlServerDatabaseConfig(sqlServerDatabaseConfigRaw interface{}) *model.
 	sqlServerDatabaseConfigData := sqlServerDatabaseConfigRaw.([]interface{})[0].(map[string]interface{})
 
 	sqlServerDatabaseConfigFormed := model.SqlServerDatabaseConfig{
-		ParameterProfile: helper.GetStringPointer(sqlServerDatabaseConfigData["parameter_profile"].(string)),
+		ParameterProfile: helper.GetStringPointer(sqlServerDatabaseConfigData["parameter_profile"]),
 	}
 
 	return &sqlServerDatabaseConfigFormed
@@ -1355,8 +1355,8 @@ func formTessellTag(tessellTagRaw interface{}) *model.TessellTag {
 	tessellTagData := tessellTagRaw.(map[string]interface{})
 
 	tessellTagFormed := model.TessellTag{
-		Name:  helper.GetStringPointer(tessellTagData["name"].(string)),
-		Value: helper.GetStringPointer(tessellTagData["value"].(string)),
+		Name:  helper.GetStringPointer(tessellTagData["name"]),
+		Value: helper.GetStringPointer(tessellTagData["value"]),
 	}
 
 	return &tessellTagFormed
@@ -1382,7 +1382,7 @@ func formTessellServiceDeletionConfig(deletionConfigRaw interface{}) *model.Tess
 	deletionConfigData := deletionConfigRaw.([]interface{})[0].(map[string]interface{})
 
 	tessellServiceDeletionConfigFormed := model.TessellServiceDeletionConfig{
-		RetainAvailabilityMachine: helper.GetBoolPointer(deletionConfigData["retain_availability_machine"].(bool)),
+		RetainAvailabilityMachine: helper.GetBoolPointer(deletionConfigData["retain_availability_machine"]),
 	}
 
 	return &tessellServiceDeletionConfigFormed
@@ -1416,8 +1416,8 @@ func formCreateDatabasePayload(databasesRaw interface{}) *model.CreateDatabasePa
 	databasesData := databasesRaw.(map[string]interface{})
 
 	createDatabasePayloadFormed := model.CreateDatabasePayload{
-		DatabaseName:          helper.GetStringPointer(databasesData["database_name"].(string)),
-		SourceDatabaseId:      helper.GetStringPointer(databasesData["source_database_id"].(string)),
+		DatabaseName:          helper.GetStringPointer(databasesData["database_name"]),
+		SourceDatabaseId:      helper.GetStringPointer(databasesData["source_database_id"]),
 		DatabaseConfiguration: formCreateDatabasePayloadDatabaseConfiguration(databasesData["database_configuration"]),
 	}
 

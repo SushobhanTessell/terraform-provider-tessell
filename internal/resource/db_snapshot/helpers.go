@@ -158,8 +158,8 @@ func parseEntityAclSharingSummaryInfoWithResData(sharedWith *model.EntityAclShar
 
 func formPayloadForCreateTessellServiceBackupRequest(d *schema.ResourceData) model.CreateBackupTaskPayload {
 	createBackupTaskPayloadFormed := model.CreateBackupTaskPayload{
-		Name:        helper.GetStringPointer(d.Get("name").(string)),
-		Description: helper.GetStringPointer(d.Get("description").(string)),
+		Name:        helper.GetStringPointer(d.Get("name")),
+		Description: helper.GetStringPointer(d.Get("description")),
 	}
 
 	return createBackupTaskPayloadFormed
