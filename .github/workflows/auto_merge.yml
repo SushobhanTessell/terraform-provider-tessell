@@ -32,7 +32,7 @@ jobs:
           number: "${{ github.event.number }}"
 
       - name: Enable Auto Merge
-        uses: peter-evans/enable-pull-request-automerge@v1
+        uses: peter-evans/enable-pull-request-automerge@v2
         with:
           token: ${{ secrets.PIPELINES_REPO_TOKEN  }}
           pull-request-number: "${{ github.event.number }}"
