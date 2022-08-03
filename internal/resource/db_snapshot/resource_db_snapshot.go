@@ -217,6 +217,10 @@ func resourceDBSnapshotRead(_ context.Context, d *schema.ResourceData, meta inte
 
 	return diags
 }
+func resourceDBSnapshotUpdate(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
+	var diags diag.Diagnostics
+	return diags
+}
 
 func resourceDBSnapshotDelete(_ context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	client := meta.(*apiClient.Client)
