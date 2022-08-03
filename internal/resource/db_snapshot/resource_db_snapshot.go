@@ -150,6 +150,18 @@ func ResourceDBSnapshot() *schema.Resource {
 				Optional:    true,
 				ForceNew:    true,
 			},
+			"block_until_complete": {
+				Type:        schema.TypeBool,
+				Description: "For any operation on this resource, block the flow until the action has completed successfully",
+				Optional:    true,
+				Default:     true,
+			},
+			"timeout": {
+				Type:        schema.TypeInt,
+				Description: "If block_until_complete is true, how long it should block for. (In seconds)",
+				Optional:    true,
+				Default:     1200,
+			},
 		},
 	}
 }
