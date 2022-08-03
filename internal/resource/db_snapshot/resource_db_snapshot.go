@@ -160,11 +160,11 @@ func resourceDBSnapshotCreate(ctx context.Context, d *schema.ResourceData, meta 
 	var diags diag.Diagnostics
 	var resourceId string
 
-	id := d.Get("id").(string)
+	availabilityMachineId := d.Get("availability_machine_id").(string)
 
 	payload := formPayloadForCreateTessellServiceBackupRequest(d)
 
-	response, _, err := client.CreateTessellServiceBackupRequest(id, payload)
+	response, _, err := client.CreateTessellServiceBackupRequest(availabilityMachineId, payload)
 	if err != nil {
 		return diag.FromErr(err)
 	}
